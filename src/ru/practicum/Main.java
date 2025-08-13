@@ -55,10 +55,12 @@ public class Main {
         manager.deleteEpic(epic1.getId());
 
         // Распечатываем списки задач и эпиков
-        System.out.println("После удаления.");
+        System.out.println("Списки после удаления.");
         System.out.println("Список задач.");
         System.out.println(manager.getAllTasks());
         System.out.println("Список эпиков.");
         System.out.println(manager.getAllEpics());
+        System.out.println("Список подзадач.");
+        System.out.println(manager.getAllSubtasks());
     }
 }

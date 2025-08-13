@@ -38,16 +38,24 @@ public class TaskManager {
 
     // Методы для Task
     public void createTask(Task task) {
+        if (task == null) {
+            return;
+        }
         task.setId(generateId());
         tasks.put(task.getId(), task);
     }
 
+    // Метод для обновления
     public void updateTask(Task task) {
+        if (task == null) {
+            return;
+        }
         if (tasks.containsKey(task.getId())) {
             tasks.put(task.getId(), task);
         }
     }
 
+    // Метод для удаления
     public void deleteTask(int id) {
         tasks.remove(id);
     }
@@ -61,7 +69,11 @@ public class TaskManager {
         epics.put(epic.getId(), epic);
     }
 
+    // Метод для обновления
     public void updateEpic(Epic epic) {
+        if (epic == null) {
+            return;
+        }
         if (epics.containsKey(epic.getId())) {
             Epic savedEpic = epics.get(epic.getId());
             savedEpic.setTitle(epic.getTitle());
@@ -69,6 +81,7 @@ public class TaskManager {
         }
     }
 
+    // Метод для удаления
     public void deleteEpic(int id) {
         Epic epic = epics.remove(id);
         if (epic != null) {
@@ -84,7 +97,6 @@ public class TaskManager {
             return;
         }
 
-
         subtask.setId(generateId());
         subtasks.put(subtask.getId(), subtask);
 
@@ -93,7 +105,11 @@ public class TaskManager {
         updateEpicStatus(epic.getId()); // Обновляем статус эпика
     }
 
+    // Метод для обновления
     public void updateSubtask(Subtask subtask) {
+        if (subtask == null || !epics.containsKey(subtask.getEpicId())) { // Проверка существования эпика
+            return;
+        }
         if (subtasks.containsKey(subtask.getId())) {
             subtasks.put(subtask.getId(), subtask);
             Epic epic = epics.get(subtask.getEpicId());
@@ -101,6 +117,7 @@ public class TaskManager {
         }
     }
 
+    // Метод для удаления
     public void deleteSubtask(int id) {
         Subtask subtask = subtasks.remove(id);
         if (subtask != null) {
@@ -121,13 +138,6 @@ public class TaskManager {
 
     public ArrayList<Subtask> getAllSubtasks() {
         return new ArrayList<>(subtasks.values());
-    }
-
-    public void deleteAllTasks() {
-        tasks.clear();      // Удаляем все обычные задачи
-        subtasks.clear();   // Удаляем все подзадачи
-        epics.clear();      // Удаляем все эпики
-        id = 1;         // Сбрасываем счётчик ID (опционально)
     }
 
     public ArrayList<Subtask> getSubtasksByEpicId(int epicId) {
