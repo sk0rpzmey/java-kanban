@@ -1,10 +1,18 @@
+package ru.practicum.model;
+
 import java.util.Objects;
 
 public class Task {
-    private String title;
-    private String description;
-    private int id;
-    Status status;
+    protected String title;
+    protected String description;
+    protected int id;
+    protected Status status;
+
+    public Task(String title, String description, Status status) {
+        this.title = title;
+        this.description = description;
+        this.status = status;
+    }
 
     public Task(String title, String description, int id, Status status) {
         this.title = title;
@@ -28,9 +36,7 @@ public class Task {
         if (obj == null) return false;
         if (this.getClass() != obj.getClass()) return false;
         Task otherTask = (Task) obj;
-        return Objects.equals(title, otherTask.title) &&
-                Objects.equals(description, otherTask.description) &&
-                (id == otherTask.id) && (status.equals(otherTask.status));
+        return id == otherTask.id;
     }
 
     @Override

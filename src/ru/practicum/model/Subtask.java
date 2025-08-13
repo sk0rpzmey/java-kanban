@@ -1,3 +1,5 @@
+package ru.practicum.model;
+
 public class Subtask extends Task{
     private int epicId;
 
@@ -5,16 +7,16 @@ public class Subtask extends Task{
         super(title, description, id, status);
         this.epicId = id;
     }
-    public void setEpicId (int epicId) { this.epicId = epicId; }
+
     public int getEpicId () { return epicId; }
 
     @Override
     public String toString() {
         return "Subtask{" +
-                "id=" + getId() +
-                ", title='" + getTitle() + '\'' +
-                ", description='" + getDescription() + '\'' +
-                ", status=" + getStatus() +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", status=" + status +
                 ", epicId=" + epicId +
                 '}';
     }
