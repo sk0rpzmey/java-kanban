@@ -150,4 +150,22 @@ public class TaskManager {
         }
         return result;
     }
+
+    // Методы для очистки всего хранилища определенного типа
+    public void deleteAllTasks() {
+        tasks.clear();
+    }
+
+    public void deleteAllEpics() {
+        subtasks.clear();
+        epics.clear();
+    }
+
+    public void deleteAllSubtasks() {
+        for (Epic epic : epics.values()) {
+            epic.getSubtaskId().clear();
+            epic.setStatus(Status.NEW);
+        }
+        subtasks.clear();
+    }
 }
