@@ -1,10 +1,11 @@
 package ru.practicum;
+import org.w3c.dom.ls.LSOutput;
 import ru.practicum.manager.*;
 import ru.practicum.model.*;
 
 public class Main {
     public static void main(String[] args) {
-        TaskManager manager = new TaskManager();
+        TaskManager manager = Manager.getDefault();
 
         // Создаем две обычные задачи
         Task task1 = new Task("Помыть машину", "Полная мойка с полировкой", Status.NEW);
@@ -36,7 +37,6 @@ public class Main {
         System.out.println("Список подзадач.");
         System.out.println(manager.getAllSubtasks());
 
-
         // Изменяем статусы
         task1.setStatus(Status.IN_PROGRESS);
         manager.updateTask(task1);
@@ -62,5 +62,12 @@ public class Main {
         System.out.println(manager.getAllEpics());
         System.out.println("Список подзадач.");
         System.out.println(manager.getAllSubtasks());
+
+        // Проверка истории просмотров
+        System.out.println("-------------");
+        System.out.println(manager.getTask(2));
+        System.out.println(manager.getEpic(6));
+        System.out.println(manager.getSubtask(7));
+        System.out.println(manager.getHistory());
     }
 }

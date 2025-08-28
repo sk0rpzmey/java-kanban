@@ -20,6 +20,12 @@ public class Task {
         this.id = id;
         this.status = status;
     }
+    public Task(Task anotherTask) {
+        this.title = anotherTask.title;
+        this.description = anotherTask.description;
+        this.id = anotherTask.id;
+        this.status = anotherTask.status;
+    }
 
     public void setTitle(String title) { this.title = title; }
     public void setDescription(String description) { this.description = description; }
