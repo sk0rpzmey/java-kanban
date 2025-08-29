@@ -3,12 +3,14 @@ package ru.practicum.manager;
 import ru.practicum.model.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
     private final ArrayList<Task> listViewedTasks = new ArrayList<>();
     private final static int LIMIT_LIST_VIEWED_TASKS = 10;
 
     // Методы для работы с историей просмотров
+    @Override
     public void addViewedTasks(Task task) {
         if (task == null) {
             return;
@@ -26,7 +28,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     @Override
-    public ArrayList<Task> getHistory() {
-        return listViewedTasks;
+    public List<Task> getHistory() {
+        return new ArrayList<>(listViewedTasks);
     }
 }

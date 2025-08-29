@@ -2,6 +2,7 @@ package ru.practicum.manager;
 
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.List;
 
 import ru.practicum.model.*;
 
@@ -9,7 +10,7 @@ public class InMemoryTaskManager implements TaskManager {
     private final HashMap<Integer, Task> tasks = new HashMap<>();
     private final HashMap<Integer, Subtask> subtasks = new HashMap<>();
     private final HashMap<Integer, Epic> epics = new HashMap<>();
-    HistoryManager historyManager = Manager.getDefaultHistory();
+    private final HistoryManager historyManager = Manager.getDefaultHistory();
 
     private int id = 1;
 
@@ -160,26 +161,35 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     // Методы для просмотра задач по id
+    @Override
     public Task getTask(int id) {
-        if (tasks.get(id) != null) {
-            historyManager.addViewedTasks(tasks.get(id));
+        Task task = tasks.get(id);
+        if (task != null) {
+            historyManager.addViewedTasks(task);
         }
-        return tasks.get(id);
-    }
-    public Subtask getSubtask(int id) {
-        if (subtasks.get(id) != null) {
-            historyManager.addViewedTasks(subtasks.get(id));
-        }
-        return subtasks.get(id);
-    }
-    public Epic getEpic(int id) {
-        if (epics.get(id) != null) {
-            historyManager.addViewedTasks(epics.get(id));
-        }
-        return epics.get(id);
+        return task;
     }
 
-    public ArrayList<Task> getHistory() {
+    @Override
+    public Subtask getSubtask(int id) {
+        Subtask subtask = subtasks.get(id);
+        if (subtask != null) {
+            historyManager.addViewedTasks(subtask);
+        }
+        return subtask;
+    }
+
+    @Override
+    public Epic getEpic(int id) {
+        Epic epic = epics.get(id);
+        if (epic != null) {
+            historyManager.addViewedTasks(epic);
+        }
+        return epic;
+    }
+
+    @Override
+    public List<Task> getHistory() {
         return historyManager.getHistory();
     }
 

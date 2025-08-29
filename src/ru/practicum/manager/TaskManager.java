@@ -6,6 +6,7 @@ import ru.practicum.model.Subtask;
 import ru.practicum.model.Task;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface TaskManager {
     // Методы для Task
@@ -41,16 +42,17 @@ public interface TaskManager {
     Subtask getSubtask(int id);
 
     Epic getEpic(int id);
-    ArrayList<Task> getHistory();
+
+    List<Task> getHistory();
 
     // Получение списков
-    ArrayList<Task> getAllTasks();
+    List<Task> getAllTasks();
 
-    ArrayList<Epic> getAllEpics();
+    List<Epic> getAllEpics();
 
-    ArrayList<Subtask> getAllSubtasks();
+    List<Subtask> getAllSubtasks();
 
-    ArrayList<Subtask> getSubtasksByEpicId(int epicId);
+    List<Subtask> getSubtasksByEpicId(int epicId);
 
     // Методы для очистки всего хранилища определенного типа
     void deleteAllTasks();

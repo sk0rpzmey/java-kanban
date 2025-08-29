@@ -1,5 +1,6 @@
 package ru.practicum.manager;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.practicum.model.*;
 
@@ -7,7 +8,12 @@ import ru.practicum.model.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryTaskManagerTest {
-    private static TaskManager manager = Manager.getDefault();
+    private TaskManager manager;
+
+    @BeforeEach
+    void setUp() {
+        manager = Manager.getDefault();
+    }
 
     @Test
     void shouldAddAndFindDifferentTaskTypes() {

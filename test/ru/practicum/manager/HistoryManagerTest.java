@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 class HistoryManagerTest {
-    private static TaskManager manager;
+    private TaskManager manager;
 
     @BeforeEach
     void setUp() {
