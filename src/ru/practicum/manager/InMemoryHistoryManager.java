@@ -2,12 +2,12 @@ package ru.practicum.manager;
 
 import ru.practicum.model.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private final ArrayList<Task> listViewedTasks = new ArrayList<>();
-    private final static int LIMIT_LIST_VIEWED_TASKS = 10;
+    //private final ArrayList<Task> listViewedTasks = new ArrayList<>();  // список для вывода
+    // здесь хранится история без повторов
+    private final Map<Integer, Task> uniqueBrowsingHistory = new LinkedHashMap<>();
 
     // Методы для работы с историей просмотров
     @Override
@@ -15,20 +15,33 @@ public class InMemoryHistoryManager implements HistoryManager {
         if (task == null) {
             return;
         }
-        if (listViewedTasks.size() == LIMIT_LIST_VIEWED_TASKS) {
-            listViewedTasks.removeFirst();
+
+        int taskId = task.getId();
+        if (uniqueBrowsingHistory.containsKey(taskId)) {
+            remove(taskId);
         }
+
         if (task instanceof Epic) {
-            listViewedTasks.add(new Epic((Epic) task));
+            uniqueBrowsingHistory.put(taskId, new Epic((Epic) task));
         } else if (task instanceof Subtask) {
-            listViewedTasks.add(new Subtask((Subtask) task));
+            uniqueBrowsingHistory.put(taskId, new Subtask((Subtask) task));
         } else {
-            listViewedTasks.add(new Task(task));
+            uniqueBrowsingHistory.put(taskId, new Task(task));
         }
     }
 
     @Override
+    public void remove(int id) {
+        uniqueBrowsingHistory.remove(id);
+    }
+
+    @Override
     public List<Task> getHistory() {
-        return new ArrayList<>(listViewedTasks);
+        return new ArrayList<>(uniqueBrowsingHistory.values());
+    }
+
+    @Override
+    public void clearHistory() {
+        uniqueBrowsingHistory.clear();
     }
 }

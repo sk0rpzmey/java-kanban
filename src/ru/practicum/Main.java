@@ -68,6 +68,10 @@ public class Main {
         System.out.println(manager.getTask(2));
         System.out.println(manager.getEpic(6));
         System.out.println(manager.getSubtask(7));
+        System.out.println(manager.getTask(2));
+        System.out.println(manager.getTask(2));
+        System.out.println(manager.getEpic(6));
+        System.out.println("-------------");
         System.out.println(manager.getHistory());
     }
 }
