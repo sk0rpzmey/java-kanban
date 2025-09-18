@@ -2,10 +2,12 @@ package ru.practicum.manager;
 
 import ru.practicum.model.*;
 
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.LinkedHashMap;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    //private final ArrayList<Task> listViewedTasks = new ArrayList<>();  // список для вывода
     // здесь хранится история без повторов
     private final Map<Integer, Task> uniqueBrowsingHistory = new LinkedHashMap<>();
 
