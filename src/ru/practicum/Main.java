@@ -1,4 +1,5 @@
 package ru.practicum;
+
 import org.w3c.dom.ls.LSOutput;
 import ru.practicum.manager.*;
 import ru.practicum.model.*;
@@ -17,8 +18,8 @@ public class Main {
         Epic epic1 = new Epic("Ремонт квартиры", "Полный цикл работ");
         manager.createEpic(epic1);
 
-        Subtask subtask1 = new Subtask("Демонтаж стен", "", epic1.getId(),  Status.NEW);
-        Subtask subtask2 = new Subtask("Укладка плитки", "",  epic1.getId(), Status.NEW);
+        Subtask subtask1 = new Subtask("Демонтаж стен", "", epic1.getId(), Status.NEW);
+        Subtask subtask2 = new Subtask("Укладка плитки", "", epic1.getId(), Status.NEW);
         manager.createSubtask(subtask1);
         manager.createSubtask(subtask2);
 
