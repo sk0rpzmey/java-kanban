@@ -15,7 +15,7 @@ class SubtaskTest {
     @BeforeAll
     static void setUp() {
         subtask1 = new Subtask("Помыть машину", "Полная мойка с полировкой", 1, Status.NEW);
-        subtask2 = new Subtask("Купить продукты", "Молоко, хлеб, яйца",1,Status.NEW);
+        subtask2 = new Subtask("Купить продукты", "Молоко, хлеб, яйца", 1, Status.NEW);
         manager = Manager.getDefault();
     }
 
@@ -26,7 +26,7 @@ class SubtaskTest {
 
     @Test
     void shouldBeNotEqualIfIdIsDifferent() {
-        Subtask subtask3 = new Subtask("Посадить дерево", "Найти поставщика саженцев",2,Status.NEW);
+        Subtask subtask3 = new Subtask("Посадить дерево", "Найти поставщика саженцев", 2, Status.NEW);
         assertNotEquals(subtask1, subtask3, "Задачи с разными id не должны быть равны");
     }
 

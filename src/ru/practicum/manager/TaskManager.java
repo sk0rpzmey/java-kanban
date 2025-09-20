@@ -1,11 +1,9 @@
 package ru.practicum.manager;
 
 import ru.practicum.model.Epic;
-import ru.practicum.model.Status;
 import ru.practicum.model.Subtask;
 import ru.practicum.model.Task;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface TaskManager {

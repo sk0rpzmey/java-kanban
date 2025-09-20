@@ -1,6 +1,6 @@
 package ru.practicum.model;
 
-public class Subtask extends Task{
+public class Subtask extends Task {
     private int epicId;
 
     public Subtask(String title, String description, int id, Status status) {
@@ -13,8 +13,13 @@ public class Subtask extends Task{
         this.epicId = anotherSubtask.epicId;
     }
 
-    public void setEpicId (int id) { epicId = id; }
-    public int getEpicId () { return epicId; }
+    public void setEpicId(int id) {
+        epicId = id;
+    }
+
+    public int getEpicId() {
+        return epicId;
+    }
 
     @Override
     public String toString() {
