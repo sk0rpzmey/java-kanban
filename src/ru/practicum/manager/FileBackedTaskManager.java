@@ -3,9 +3,10 @@ package ru.practicum.manager;
 import java.util.*;
 import java.io.*;
 import java.nio.file.Files;
+
 import ru.practicum.model.*;
 
-public class FileBackedTaskManager extends InMemoryTaskManager{
+public class FileBackedTaskManager extends InMemoryTaskManager {
     private final File file;
 
     public FileBackedTaskManager(File file) {
@@ -159,7 +160,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager{
     }
 
     public void save() {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(file))){
+        try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
             writer.println("id,type,name,status,description,epic");
 
             for (Task task : getAllTasks()) {
