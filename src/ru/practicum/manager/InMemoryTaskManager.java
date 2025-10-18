@@ -6,7 +6,7 @@ import java.util.List;
 
 import ru.practicum.model.*;
 
-public abstract class InMemoryTaskManager implements TaskManager {
+public class InMemoryTaskManager implements TaskManager {
     private final HashMap<Integer, Task> tasks = new HashMap<>();
     private final HashMap<Integer, Subtask> subtasks = new HashMap<>();
     private final HashMap<Integer, Epic> epics = new HashMap<>();
@@ -80,7 +80,12 @@ public abstract class InMemoryTaskManager implements TaskManager {
         if (epic == null) {
             return;
         }
-        epic.setId(generateId());
+        if (epic.getId() == 0) { // ← Добавьте эту проверку
+            epic.setId(generateId());
+        }
+        if (epics.containsKey(epic.getId())) {
+            return; // Не добавляем, если ID уже существует
+        }
         epics.put(epic.getId(), epic);
     }
 
@@ -113,7 +118,7 @@ public abstract class InMemoryTaskManager implements TaskManager {
     // Методы для Subtask
     @Override
     public void createSubtask(Subtask subtask) {
-        if (subtask == null) { // Проверка существования эпика
+        if (subtask == null) {
             return;
         }
 
@@ -121,9 +126,15 @@ public abstract class InMemoryTaskManager implements TaskManager {
             return;
         }
 
-        subtask.setId(generateId());
+        if (subtask.getId() == 0) { // ← Добавьте эту проверку
+            subtask.setId(generateId());
+        }
         if (subtask.getEpicId() == subtask.getId()) {
             return; //Подзадача не может быть своим же эпиком
+        }
+
+        if (subtasks.containsKey(subtask.getId())) {
+            return; // Не добавляем, если ID уже существует
         }
 
         subtasks.put(subtask.getId(), subtask);
