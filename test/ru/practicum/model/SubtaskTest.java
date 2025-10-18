@@ -26,7 +26,8 @@ class SubtaskTest {
 
     @Test
     void shouldBeNotEqualIfIdIsDifferent() {
-        Subtask subtask3 = new Subtask("Посадить дерево", "Найти поставщика саженцев", 2, Status.NEW);
+        Subtask subtask3 = new Subtask("Посадить дерево", "Найти поставщика саженцев", 1, Status.NEW); // epicId = 1
+        subtask3.setId(2); // устанавливаем id = 2
         assertNotEquals(subtask1, subtask3, "Задачи с разными id не должны быть равны");
     }
 
