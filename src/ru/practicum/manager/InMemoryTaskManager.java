@@ -7,12 +7,12 @@ import java.util.List;
 import ru.practicum.model.*;
 
 public class InMemoryTaskManager implements TaskManager {
-    private final HashMap<Integer, Task> tasks = new HashMap<>();
-    private final HashMap<Integer, Subtask> subtasks = new HashMap<>();
-    private final HashMap<Integer, Epic> epics = new HashMap<>();
+    protected final HashMap<Integer, Task> tasks = new HashMap<>();
+    protected final HashMap<Integer, Subtask> subtasks = new HashMap<>();
+    protected final HashMap<Integer, Epic> epics = new HashMap<>();
     private final HistoryManager historyManager = Manager.getDefaultHistory();
 
-    private int id = 1;
+    protected int id = 1;
 
     private int generateId() {
         return id++;

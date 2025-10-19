@@ -1,5 +1,0 @@
-id,type,name,status,description,epic
-1,TASK,Помыть машину,NEW,Полная мойка с полировкой,
-2,EPIC,Ремонт квартиры,NEW,Полный цикл работ,
-3,SUBTASK,Демонтаж стен,NEW,,2
-4,SUBTASK,Укладка плитки,NEW,,2
