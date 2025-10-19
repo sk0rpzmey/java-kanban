@@ -3,7 +3,6 @@ package ru.practicum;
 import ru.practicum.manager.*;
 import ru.practicum.model.*;
 
-import java.io.File;
 
 public class Main {
     public static void main(String[] args) {
