@@ -3,9 +3,14 @@ package ru.practicum.model;
 public class Subtask extends Task {
     private int epicId;
 
-    public Subtask(String title, String description, int id, Status status) {
+    public Subtask(String title, String description, int epicId, Status status) {
+        super(title, description, 0, status);
+        this.epicId = epicId;
+    }
+
+    public Subtask(String title, String description, int id, int epicId, Status status) {
         super(title, description, id, status);
-        this.epicId = id;
+        this.epicId = epicId;
     }
 
     public Subtask(Subtask anotherSubtask) {
@@ -20,6 +25,12 @@ public class Subtask extends Task {
     public int getEpicId() {
         return epicId;
     }
+
+    @Override
+    public TaskType getType() {
+        return TaskType.SUBTASK;
+    }
+
 
     @Override
     public String toString() {

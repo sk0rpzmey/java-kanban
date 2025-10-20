@@ -3,9 +3,12 @@ package ru.practicum;
 import ru.practicum.manager.*;
 import ru.practicum.model.*;
 
+
 public class Main {
     public static void main(String[] args) {
+
         TaskManager manager = Manager.getDefault();
+
 
         // Создаем две обычные задачи
         Task task1 = new Task("Помыть машину", "Полная мойка с полировкой", Status.NEW);
@@ -25,6 +28,7 @@ public class Main {
         // Создаем второй эпик с одной подзадачей
         Epic epic2 = new Epic("Подготовка к отпуску", "");
         manager.createEpic(epic2);
+
 
         Subtask subtask3 = new Subtask("Купить билеты", "", epic2.getId(), Status.NEW);
         manager.createSubtask(subtask3);
