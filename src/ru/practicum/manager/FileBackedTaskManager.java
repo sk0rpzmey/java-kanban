@@ -104,7 +104,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 }
 
                 try {
-                    Task task = fromString(line);
+                    Task task = manager.fromString(line);
                     if (task != null) {
                         switch (task.getType()) {
                             case EPIC:
@@ -139,28 +139,28 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         return manager;
     }
 
-    private static Task fromString(String value) {
+    private Task fromString(String value) {
         String[] parts = value.split(",");
         if (parts.length < 5) {
-            return null;
+            throw new ManagerLoadException("Недостаточно данных в строке", null);
         }
 
         try {
             int id = Integer.parseInt(parts[0]);
-            String type = parts[1];
+            TaskType type = TaskType.valueOf(parts[1]);;
             String title = parts[2];
             Status status = Status.valueOf(parts[3]);
             String description = parts[4];
 
             switch (type) {
-                case "TASK":
+                case TASK:
                     Task task = new Task(title, description, id, status);
                     return task;
-                case "EPIC":
+                case EPIC:
                     Epic epic = new Epic(title, description, id);
                     epic.setStatus(status);
                     return epic;
-                case "SUBTASK":
+                case SUBTASK:
                     int epicId = 0;
                     if (parts.length > 5 && !parts[5].isEmpty()) {
                         epicId = Integer.parseInt(parts[5]);
@@ -177,7 +177,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    public void save() {
+    private void save() {
         try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
             writer.println(CSV_HEADER);
 

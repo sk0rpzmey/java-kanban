@@ -22,10 +22,47 @@ public class FileBackedTaskManagerTest {
         tempFile.createNewFile();
 
         FileBackedTaskManager manager = FileBackedTaskManager.loadFromFile(tempFile);
+        Task task = new Task("Помыть машину", "Полная мойка с полировкой", Status.NEW);
+        manager.createTask(task);
 
-        assertTrue(manager.getAllTasks().isEmpty());
-        assertTrue(manager.getAllEpics().isEmpty());
-        assertTrue(manager.getAllSubtasks().isEmpty());
+        Epic epic = new Epic("Ремонт квартиры", "Полный цикл работ");
+        manager.createEpic(epic);
+
+        Subtask subtask = new Subtask("Демонтаж стен", "", 2, Status.NEW);
+        manager.createSubtask(subtask);
+
+        // Проверяем, что файл был создан
+        assertTrue(tempFile.exists());
+
+        // Проверяем данные
+        FileBackedTaskManager loadedManager = FileBackedTaskManager.loadFromFile(tempFile);
+
+        // Проверяем задачу
+        assertEquals(1, loadedManager.getAllTasks().size());
+        Task loadedTask = loadedManager.getAllTasks().getFirst();
+        assertEquals(task.getId(), loadedTask.getId());
+        assertEquals(task.getStatus(), loadedTask.getStatus());
+        assertEquals(task.getDescription(), loadedTask.getDescription());
+        assertEquals(task.getTitle(), loadedTask.getTitle());
+
+        // Проверяем эпик
+        assertEquals(1, loadedManager.getAllEpics().size());
+        Epic loadedEpic = loadedManager.getAllEpics().getFirst();
+        assertEquals(epic.getId(), loadedEpic.getId());
+        assertEquals(epic.getStatus(), loadedEpic.getStatus());
+        assertEquals(epic.getDescription(), loadedEpic.getDescription());
+        assertEquals(epic.getTitle(), loadedEpic.getTitle());
+        // Проверяем подзадачи эпика
+        assertEquals(epic.getSubtaskId(), loadedEpic.getSubtaskId());
+
+        // Проверяем подзадачу
+        assertEquals(1, loadedManager.getAllSubtasks().size());
+        Subtask loadedSubtask = loadedManager.getAllSubtasks().getFirst();
+        assertEquals(subtask.getId(), loadedSubtask.getId());
+        assertEquals(subtask.getStatus(), loadedSubtask.getStatus());
+        assertEquals(subtask.getDescription(), loadedSubtask.getDescription());
+        assertEquals(subtask.getTitle(), loadedSubtask.getTitle());
+        assertEquals(subtask.getEpicId(), loadedSubtask.getEpicId()); // проверяем epicId подзадачи
     }
 
     @Test

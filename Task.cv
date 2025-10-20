@@ -1,4 +1,0 @@
-id,type,name,status,description,epic
-2,TASK,Купить продукты,NEW,Молоко, хлеб, яйца,
-6,EPIC,Подготовка к отпуску,DONE,,
-7,SUBTASK,Купить билеты,DONE,,6
