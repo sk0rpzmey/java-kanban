@@ -1,5 +1,7 @@
 package ru.practicum.model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task {
@@ -7,14 +9,17 @@ public class Task {
     protected String description;
     protected int id;
     protected Status status;
+    protected Duration duration;
+    protected LocalDateTime startTime;
 
-    public Task(String title, String description, Status status) {
+    public Task(String title, String description, Status status, int durationInMinutes, ) {
         this.title = title;
         this.description = description;
         this.status = status;
+        this.duration = Duration.ofMinutes(durationInMinutes);
     }
 
-    public Task(String title, String description, int id, Status status) {
+    public Task(String title, String description, int id, Status status, ) {
         this.title = title;
         this.description = description;
         this.id = id;
