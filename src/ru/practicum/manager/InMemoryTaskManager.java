@@ -1,5 +1,6 @@
 package ru.practicum.manager;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
@@ -142,6 +143,7 @@ public class InMemoryTaskManager implements TaskManager {
         Epic epic = epics.get(subtask.getEpicId());
         epic.addSubtaskId(subtask.getId());
         updateEpicStatus(epic.getId()); // Обновляем статус эпика
+        updateEpicDuration(subtask.getEpicId());  // Обновление продолжительности эпика
     }
 
     // Метод для обновления
@@ -159,7 +161,8 @@ public class InMemoryTaskManager implements TaskManager {
         if (subtasks.containsKey(subtask.getId())) {
             subtasks.put(subtask.getId(), subtask);
             Epic epic = epics.get(subtask.getEpicId());
-            updateEpicStatus(epic.getId());
+            updateEpicStatus(epic.getId());  // Обновляем статус эпика
+            updateEpicDuration(subtask.getEpicId());  // Обновление продолжительности эпика
         }
     }
 
@@ -270,4 +273,19 @@ public class InMemoryTaskManager implements TaskManager {
         }
         subtasks.clear();
     }
+
+    private void updateEpicDuration(int epicId) {
+        Epic epic = epics.get(epicId);
+        if (epic == null) {
+            return;
+        }
+
+        Duration total = Duration.ZERO;
+        for (Subtask subtask : getSubtasksByEpicId(epicId)) {
+            total = total.plus(subtask.getDuration());
+        }
+
+        epic.setDuration(total);
+    }
+
 }

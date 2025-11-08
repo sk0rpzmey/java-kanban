@@ -12,18 +12,33 @@ public class Task {
     protected Duration duration;
     protected LocalDateTime startTime;
 
-    public Task(String title, String description, Status status, int durationInMinutes, ) {
+    public Task(
+            String title,
+            String description,
+            Status status,
+            int durationInMinutes,
+            LocalDateTime startTime
+    ) {
         this.title = title;
         this.description = description;
         this.status = status;
         this.duration = Duration.ofMinutes(durationInMinutes);
+        this.startTime = startTime;
     }
 
-    public Task(String title, String description, int id, Status status, ) {
+    public Task(
+            String title,
+            String description,
+            int id, Status status,
+            int durationInMinutes,
+            LocalDateTime startTime
+    ) {
         this.title = title;
         this.description = description;
         this.id = id;
         this.status = status;
+        this.duration = Duration.ofMinutes(durationInMinutes);
+        this.startTime = startTime;
     }
 
     public Task(Task anotherTask) {
@@ -31,6 +46,8 @@ public class Task {
         this.description = anotherTask.description;
         this.id = anotherTask.id;
         this.status = anotherTask.status;
+        this.duration = anotherTask.duration;
+        this.startTime = anotherTask.startTime;
     }
 
     public void setTitle(String title) {
@@ -47,6 +64,14 @@ public class Task {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public void setDuration(Duration Minutes) {
+        this.duration = Minutes;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
     }
 
     public String getTitle() {
@@ -67,6 +92,21 @@ public class Task {
 
     public TaskType getType() {
         return TaskType.TASK;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        if (startTime == null) {
+            return null;
+        }
+        return startTime.plus(duration);
     }
 
     @Override
@@ -90,6 +130,9 @@ public class Task {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", status=" + status +
+                ", duration=" + duration +
+                ", startTime=" + startTime +
+                ", endTime=" + getEndTime() +
                 '}';
     }
 }
