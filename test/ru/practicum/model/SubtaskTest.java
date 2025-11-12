@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import ru.practicum.manager.Manager;
 import ru.practicum.manager.TaskManager;
 
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class SubtaskTest {
@@ -14,8 +16,22 @@ class SubtaskTest {
 
     @BeforeAll
     static void setUp() {
-        subtask1 = new Subtask("Помыть машину", "Полная мойка с полировкой", 1, Status.NEW);
-        subtask2 = new Subtask("Купить продукты", "Молоко, хлеб, яйца", 1, Status.NEW);
+        subtask1 = new Subtask(
+                "Помыть машину",
+                "Полная мойка с полировкой",
+                1,
+                Status.NEW,
+                120,
+                LocalDateTime.of(2025, 6, 1, 12, 30)
+        );
+        subtask2 = new Subtask(
+                "Купить продукты",
+                "Молоко, хлеб, яйца",
+                1,
+                Status.NEW,
+                120,
+                LocalDateTime.of(2025, 6, 1, 12, 30)
+        );
         manager = Manager.getDefault();
     }
 
@@ -26,7 +42,14 @@ class SubtaskTest {
 
     @Test
     void shouldBeNotEqualIfIdIsDifferent() {
-        Subtask subtask3 = new Subtask("Посадить дерево", "Найти поставщика саженцев", 1, Status.NEW); // epicId = 1
+        Subtask subtask3 = new Subtask(
+                "Посадить дерево",
+                "Найти поставщика саженцев",
+                1,
+                Status.NEW,
+                120,
+                LocalDateTime.of(2025, 6, 1, 12, 30)
+        ); // epicId = 1
         subtask3.setId(2); // устанавливаем id = 2
         assertNotEquals(subtask1, subtask3, "Задачи с разными id не должны быть равны");
     }
@@ -35,10 +58,24 @@ class SubtaskTest {
     void shouldNotAddSubtaskAsEpicToItself() {
         Epic epic = new Epic("Основной эпик", "Описание");
         manager.createEpic(epic);
-        Subtask subtask = new Subtask("Подзадача", "Описание", epic.getId(), Status.NEW);
+        Subtask subtask = new Subtask(
+                "Подзадача",
+                "Описание",
+                epic.getId(),
+                Status.NEW,
+                120,
+                LocalDateTime.of(2025, 6, 1, 12, 30)
+        );
         manager.createSubtask(subtask);
         int originalEpicId = manager.getSubtask(subtask.getId()).getEpicId();
-        Subtask updatedSubtask = new Subtask("Подзадача", "Описание", subtask.getId(), Status.NEW);
+        Subtask updatedSubtask = new Subtask(
+                "Подзадача",
+                "Описание",
+                subtask.getId(),
+                Status.NEW,
+                120,
+                LocalDateTime.of(2025, 6, 1, 12, 30)
+        );
         updatedSubtask.setEpicId(subtask.getId()); // Пытаемся сделать подзадачу своим же эпиком
         manager.updateSubtask(updatedSubtask);
         assertEquals(originalEpicId, manager.getSubtask(subtask.getId()).getEpicId());

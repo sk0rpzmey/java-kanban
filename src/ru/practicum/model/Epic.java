@@ -28,6 +28,10 @@ public class Epic extends Task {
         subtaskId.add(id);
     }
 
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
     public void removeSubtaskId(int id) {
         subtaskId.remove((Integer) id);
     }

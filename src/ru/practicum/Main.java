@@ -3,77 +3,87 @@ package ru.practicum;
 import ru.practicum.manager.*;
 import ru.practicum.model.*;
 
+import java.io.File;
 import java.time.LocalDateTime;
 
 
 public class Main {
     public static void main(String[] args) {
 
-        TaskManager manager = Manager.getDefault();
+        TaskManager manager = Manager.getDefaultFileTaskManager(new File("src//test.csv"));
+        File tmpFile = new File("src", "test.csv");
+
+//        FileBackedTaskManager fileManager = FileBackedTaskManager.loadFromFile(tmpFile);
+//
+//        System.out.println(fileManager.getAllTasks());
+//        System.out.println(fileManager.getAllSubtasks());
+//        System.out.println(fileManager.getAllEpics());
 
 
-        // Создаем две обычные задачи
-        Task task1 = new Task(
-                "Помыть машину",
-                "Полная мойка с полировкой",
-                Status.NEW,
-                120,
-                LocalDateTime.of(2025, 6, 1, 12, 30)
-        );
-        Task task2 = new Task(
-                "Купить продукты",
-                "Молоко, хлеб, яйца",
-                Status.NEW,
-                20,
-                LocalDateTime.of(2025, 8, 12, 8, 30)
-        );
-        manager.createTask(task1);
-        manager.createTask(task2);
 
-        // Создаем первый эпик с двумя подзадачами
-        Epic epic1 = new Epic("Ремонт квартиры", "Полный цикл работ");
-        manager.createEpic(epic1);
+//        // Создаем две обычные задачи
+//        Task task1 = new Task(
+//                "Помыть машину",
+//                "Полная мойка с полировкой",
+//                Status.NEW,
+//                120,
+//                LocalDateTime.of(2025, 6, 1, 12, 30)
+//        );
+//        Task task2 = new Task(
+//                "Купить продукты",
+//                "Молоко, хлеб, яйца",
+//                Status.NEW,
+//                20,
+//                LocalDateTime.of(2025, 8, 12, 8, 30)
+//        );
+//        manager.createTask(task1);
+//        manager.createTask(task2);
+//
+//        // Создаем первый эпик с двумя подзадачами
+//        Epic epic1 = new Epic("Ремонт квартиры", "Полный цикл работ");
+//        manager.createEpic(epic1);
+//
+//        Subtask subtask1 = new Subtask(
+//                "Демонтаж стен",
+//                "",
+//                epic1.getId(),
+//                Status.NEW,
+//                720,
+//                LocalDateTime.of(2025, 8, 12, 8, 30)
+//        );
+//        Subtask subtask2 = new Subtask(
+//                "Укладка плитки",
+//                "",
+//                epic1.getId(),
+//                Status.NEW,
+//                220,
+//                LocalDateTime.of(2025, 9, 1, 8, 30));
+//        manager.createSubtask(subtask1);
+//        manager.createSubtask(subtask2);
+//
+//        // Создаем второй эпик с одной подзадачей
+//        Epic epic2 = new Epic("Подготовка к отпуску", "");
+//        manager.createEpic(epic2);
+//
+//
+//        Subtask subtask3 = new Subtask(
+//                "Купить билеты",
+//                "",
+//                epic2.getId(),
+//                Status.NEW,
+//                10,
+//                LocalDateTime.of(2025, 12, 12, 17, 30)
+//        );
+//        manager.createSubtask(subtask3);
+//
+//        // Распечатываем списки задач
+//        System.out.println("Список задач.");
+//        System.out.println(manager.getAllTasks());
+//        System.out.println("Список эпиков.");
+//        System.out.println(manager.getAllEpics());
+//        System.out.println("Список подзадач.");
+//        System.out.println(manager.getAllSubtasks());
 
-        Subtask subtask1 = new Subtask(
-                "Демонтаж стен",
-                "",
-                epic1.getId(),
-                Status.NEW,
-                720,
-                LocalDateTime.of(2025, 8, 12, 8, 30)
-        );
-        Subtask subtask2 = new Subtask(
-                "Укладка плитки",
-                "",
-                epic1.getId(),
-                Status.NEW,
-                220,
-                LocalDateTime.of(2025, 9, 1, 8, 30));
-        manager.createSubtask(subtask1);
-        manager.createSubtask(subtask2);
-
-        // Создаем второй эпик с одной подзадачей
-        Epic epic2 = new Epic("Подготовка к отпуску", "");
-        manager.createEpic(epic2);
-
-
-        Subtask subtask3 = new Subtask(
-                "Купить билеты",
-                "",
-                epic2.getId(),
-                Status.NEW,
-                10,
-                LocalDateTime.of(2025, 12, 12, 17, 30)
-        );
-        manager.createSubtask(subtask3);
-
-        // Распечатываем списки задач
-        System.out.println("Список задач.");
-        System.out.println(manager.getAllTasks());
-        System.out.println("Список эпиков.");
-        System.out.println(manager.getAllEpics());
-        System.out.println("Список подзадач.");
-        System.out.println(manager.getAllSubtasks());
 
 //        // Изменяем статусы
 //        task1.setStatus(Status.IN_PROGRESS);

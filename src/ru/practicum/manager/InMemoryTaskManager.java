@@ -1,6 +1,7 @@
 package ru.practicum.manager;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
@@ -144,6 +145,7 @@ public class InMemoryTaskManager implements TaskManager {
         epic.addSubtaskId(subtask.getId());
         updateEpicStatus(epic.getId()); // Обновляем статус эпика
         updateEpicDuration(subtask.getEpicId());  // Обновление продолжительности эпика
+        updateEpicTime(subtask.getEpicId());
     }
 
     // Метод для обновления
@@ -163,6 +165,7 @@ public class InMemoryTaskManager implements TaskManager {
             Epic epic = epics.get(subtask.getEpicId());
             updateEpicStatus(epic.getId());  // Обновляем статус эпика
             updateEpicDuration(subtask.getEpicId());  // Обновление продолжительности эпика
+            updateEpicTime(subtask.getEpicId());  // Обновление времени начала и окончания эпика
         }
     }
 
@@ -174,6 +177,8 @@ public class InMemoryTaskManager implements TaskManager {
             Epic epic = epics.get(subtask.getEpicId());
             epic.removeSubtaskId(id);
             updateEpicStatus(epic.getId());
+            updateEpicDuration(subtask.getEpicId());  // Обновление продолжительности эпика
+            updateEpicTime(subtask.getEpicId());  // Обновление времени начала и окончания эпика
             historyManager.remove(id);
         }
     }
@@ -286,6 +291,41 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         epic.setDuration(total);
+    }
+
+    private void updateEpicTime(int epicId) {
+        Epic epic = epics.get(epicId);
+        if (epic == null) {
+            return;
+        }
+
+        LocalDateTime startTime = null;
+        LocalDateTime endTime = null;
+
+        for (Subtask subtask : getSubtasksByEpicId(epicId)) {
+            LocalDateTime start = subtask.getStartTime();
+            LocalDateTime end = subtask.getEndTime();
+
+            if (start == null && end == null) {
+                continue;
+            }
+
+            if (startTime == null || start.isBefore(startTime)) {
+                startTime = start;
+            }
+
+            if (endTime == null || end.isAfter(endTime)) {
+                endTime = end;
+            }
+        }
+
+        if (startTime == null || endTime == null) {
+            return;
+        } else {
+            epic.setStartTime(startTime);
+            epic.setEndTime(endTime);
+        }
+
     }
 
 }

@@ -29,7 +29,8 @@ public class Task {
     public Task(
             String title,
             String description,
-            int id, Status status,
+            int id,
+            Status status,
             int durationInMinutes,
             LocalDateTime startTime
     ) {
@@ -132,7 +133,6 @@ public class Task {
                 ", status=" + status +
                 ", duration=" + duration +
                 ", startTime=" + startTime +
-                ", endTime=" + getEndTime() +
                 '}';
     }
 }

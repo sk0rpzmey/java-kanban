@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import ru.practicum.model.*;
@@ -22,13 +24,26 @@ public class FileBackedTaskManagerTest {
         tempFile.createNewFile();
 
         FileBackedTaskManager manager = FileBackedTaskManager.loadFromFile(tempFile);
-        Task task = new Task("Помыть машину", "Полная мойка с полировкой", Status.NEW);
+        Task task = new Task(
+                "Помыть машину",
+                "Полная мойка с полировкой",
+                Status.NEW,
+                20,
+                LocalDateTime.of(2025, 8, 12, 8, 30)
+        );
         manager.createTask(task);
 
         Epic epic = new Epic("Ремонт квартиры", "Полный цикл работ");
         manager.createEpic(epic);
 
-        Subtask subtask = new Subtask("Демонтаж стен", "", 2, Status.NEW);
+        Subtask subtask = new Subtask(
+                "Демонтаж стен",
+                "",
+                2,
+                Status.NEW,
+                720,
+                LocalDateTime.of(2025, 8, 12, 8, 30)
+        );
         manager.createSubtask(subtask);
 
         // Проверяем, что файл был создан
@@ -71,10 +86,10 @@ public class FileBackedTaskManagerTest {
 
         // Записываем данные в файл
         try (FileWriter writer = new FileWriter(tempFile)) {
-            writer.write("id,type,name,status,description,epic\n");
-            writer.write("1,TASK,Помыть машину,NEW,Полная мойка с полировкой,\n");
-            writer.write("2,EPIC,Ремонт квартиры,NEW,Полный цикл работ,\n");
-            writer.write("3,SUBTASK,Демонтаж стен,NEW,,2\n");
+            writer.write("id;type;name;status;description;duration;startTime;endTime;epic\n");
+            writer.write("1;TASK;Помыть машину;NEW;Полная мойка с полировкой;PT2H;2025-06-01T12:30;2025-06-01T14:30;\n");
+            writer.write("2;EPIC;Ремонт квартиры;NEW;Полный цикл работ;PT12H;2025-08-12T08:30;2025-09-01T12:10;\n");
+            writer.write("3;SUBTASK;Демонтаж стен;NEW;;PT12H;2025-08-12T08:30;2025-08-12T20:30;2\n");
         }
 
         FileBackedTaskManager manager = FileBackedTaskManager.loadFromFile(tempFile);
@@ -90,13 +105,26 @@ public class FileBackedTaskManagerTest {
 
         FileBackedTaskManager manager = new FileBackedTaskManager(tempFile);
 
-        Task task = new Task("Помыть машину", "Полная мойка с полировкой", Status.NEW);
+        Task task = new Task(
+                "Помыть машину",
+                "Полная мойка с полировкой",
+                Status.NEW,
+                20,
+                LocalDateTime.of(2025, 8, 12, 8, 30)
+        );
         manager.createTask(task);
 
         Epic epic = new Epic("Ремонт квартиры", "Полный цикл работ");
         manager.createEpic(epic);
 
-        Subtask subtask = new Subtask("Демонтаж стен", "", 2, Status.NEW);
+        Subtask subtask = new Subtask(
+                "Демонтаж стен",
+                "",
+                2,
+                Status.NEW,
+                720,
+                LocalDateTime.of(2025, 8, 12, 8, 30)
+        );
         manager.createSubtask(subtask);
 
         // Проверяем, что файл был создан и содержит данные

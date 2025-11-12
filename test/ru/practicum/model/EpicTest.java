@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import ru.practicum.manager.Manager;
 import ru.practicum.manager.TaskManager;
 
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class EpicTest {
@@ -34,9 +36,23 @@ class EpicTest {
     void shouldNotAddEpicAsSubtaskToItself() {
         Epic epic = new Epic("Ремонт", "Описание");
         manager.createEpic(epic);
-        Subtask subtask = new Subtask("Подзадача", "Описание", epic.getId(), Status.NEW);
+        Subtask subtask = new Subtask(
+                "Подзадача",
+                "Описание",
+                epic.getId(),
+                Status.NEW,
+                720,
+                LocalDateTime.of(2025, 8, 12, 8, 30)
+        );
         manager.createSubtask(subtask);
-        Subtask updatedSubtask = new Subtask("Подзадача", "Описание", subtask.getId(), Status.NEW);
+        Subtask updatedSubtask = new Subtask(
+                "Подзадача",
+                "Описание",
+                subtask.getId(),
+                Status.NEW,
+                720,
+                LocalDateTime.of(2025, 8, 12, 8, 30)
+        );
         updatedSubtask.setEpicId(updatedSubtask.getId());
         manager.updateSubtask(updatedSubtask);
         assertEquals(epic.getId(), manager.getSubtask(subtask.getId()).getEpicId());
