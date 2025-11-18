@@ -15,6 +15,16 @@ public class Task {
     public Task(
             String title,
             String description,
+            Status status
+    ) {
+        this.title = title;
+        this.description = description;
+        this.status = status;
+    }
+
+    public Task(
+            String title,
+            String description,
             Status status,
             int durationInMinutes,
             LocalDateTime startTime
@@ -50,6 +60,7 @@ public class Task {
         this.duration = anotherTask.duration;
         this.startTime = anotherTask.startTime;
     }
+
 
     public void setTitle(String title) {
         this.title = title;

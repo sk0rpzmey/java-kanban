@@ -8,7 +8,8 @@ public class Subtask extends Task {
     public Subtask(
             String title,
             String description,
-            int epicId, Status status,
+            int epicId,
+            Status status,
             int durationInMinutes,
             LocalDateTime startTime
     ) {
@@ -19,7 +20,8 @@ public class Subtask extends Task {
     public Subtask(
             String title,
             String description,
-            int id, int epicId,
+            int id,
+            int epicId,
             Status status,
             int durationInMinutes,
             LocalDateTime startTime

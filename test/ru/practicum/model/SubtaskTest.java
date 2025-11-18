@@ -80,4 +80,20 @@ class SubtaskTest {
         manager.updateSubtask(updatedSubtask);
         assertEquals(originalEpicId, manager.getSubtask(subtask.getId()).getEpicId());
     }
+
+    @Test
+    void  shouldBeRelatedToEpic() {
+        Epic epic = new Epic("Основной эпик", "Описание");
+        manager.createEpic(epic);
+        Subtask subtask = new Subtask(
+                "Подзадача",
+                "Описание",
+                epic.getId(),
+                Status.NEW,
+                120,
+                LocalDateTime.of(2025, 6, 2, 12, 30)
+        );
+        manager.createSubtask(subtask);
+        assertEquals(epic.getId(), subtask.getEpicId());
+    }
 }

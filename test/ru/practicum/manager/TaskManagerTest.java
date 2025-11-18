@@ -1,10 +1,15 @@
 package ru.practicum.manager;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TaskManagerTest {
+abstract class TaskManagerTest <T extends TaskManager> {
+
+    @BeforeEach
+    abstract void setUp();
+
     @Test
     void shouldReturnInitializedManagers() {
         // Проверяем, что getDefault() возвращает готовый к работе TaskManager

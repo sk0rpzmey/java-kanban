@@ -1,35 +1,46 @@
 package ru.practicum.manager;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import ru.practicum.model.*;
 
-public class FileBackedTaskManagerTest {
+public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager>{
+    private FileBackedTaskManager manager;
     @TempDir
     Path tempDir; // Автоматически создаст директорию
 
+    @BeforeEach
+    void setUp()  {
+        manager = new FileBackedTaskManager(Paths.get("test_tasks.csv").toFile());
+    }
+
+    @AfterEach
+    void cleanup() throws IOException {
+        // удалить временный файл после теста
+        Files.deleteIfExists(Paths.get("test_tasks.csv"));
+    }
+
     @Test
     void shouldLoadFromFileWithEmptyFile() throws IOException {
-        File tempFile = tempDir.resolve("tasks.csv").toFile();
-        // Создаем пустой файл
-        tempFile.createNewFile();
-
-        FileBackedTaskManager manager = FileBackedTaskManager.loadFromFile(tempFile);
         Task task = new Task(
                 "Помыть машину",
                 "Полная мойка с полировкой",
                 Status.NEW,
                 20,
-                LocalDateTime.of(2025, 8, 12, 8, 30)
+                LocalDateTime.of(2025, 9, 12, 8, 30)
         );
         manager.createTask(task);
 
@@ -47,22 +58,21 @@ public class FileBackedTaskManagerTest {
         manager.createSubtask(subtask);
 
         // Проверяем, что файл был создан
-        assertTrue(tempFile.exists());
+        File file = new File("test_tasks.csv");
+        assertTrue(file.exists());
 
-        // Проверяем данные
-        FileBackedTaskManager loadedManager = FileBackedTaskManager.loadFromFile(tempFile);
 
         // Проверяем задачу
-        assertEquals(1, loadedManager.getAllTasks().size());
-        Task loadedTask = loadedManager.getAllTasks().getFirst();
+        assertEquals(1, manager.getAllTasks().size());
+        Task loadedTask = manager.getAllTasks().getFirst();
         assertEquals(task.getId(), loadedTask.getId());
         assertEquals(task.getStatus(), loadedTask.getStatus());
         assertEquals(task.getDescription(), loadedTask.getDescription());
         assertEquals(task.getTitle(), loadedTask.getTitle());
 
         // Проверяем эпик
-        assertEquals(1, loadedManager.getAllEpics().size());
-        Epic loadedEpic = loadedManager.getAllEpics().getFirst();
+        assertEquals(1, manager.getAllEpics().size());
+        Epic loadedEpic = manager.getAllEpics().getFirst();
         assertEquals(epic.getId(), loadedEpic.getId());
         assertEquals(epic.getStatus(), loadedEpic.getStatus());
         assertEquals(epic.getDescription(), loadedEpic.getDescription());
@@ -71,8 +81,8 @@ public class FileBackedTaskManagerTest {
         assertEquals(epic.getSubtaskId(), loadedEpic.getSubtaskId());
 
         // Проверяем подзадачу
-        assertEquals(1, loadedManager.getAllSubtasks().size());
-        Subtask loadedSubtask = loadedManager.getAllSubtasks().getFirst();
+        assertEquals(1, manager.getAllSubtasks().size());
+        Subtask loadedSubtask = manager.getAllSubtasks().getFirst();
         assertEquals(subtask.getId(), loadedSubtask.getId());
         assertEquals(subtask.getStatus(), loadedSubtask.getStatus());
         assertEquals(subtask.getDescription(), loadedSubtask.getDescription());
@@ -110,7 +120,7 @@ public class FileBackedTaskManagerTest {
                 "Полная мойка с полировкой",
                 Status.NEW,
                 20,
-                LocalDateTime.of(2025, 8, 12, 8, 30)
+                LocalDateTime.of(2025, 9, 12, 8, 30)
         );
         manager.createTask(task);
 

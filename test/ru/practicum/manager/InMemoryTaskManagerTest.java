@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class InMemoryTaskManagerTest {
+class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     private TaskManager manager;
 
     @BeforeEach
@@ -24,7 +24,7 @@ class InMemoryTaskManagerTest {
                 "Полная мойка с полировкой",
                 Status.NEW,
                 20,
-                LocalDateTime.of(2025, 8, 12, 8, 30)
+                LocalDateTime.of(2025, 9, 12, 8, 30)
         );
         manager.createTask(task);
         Epic epic = new Epic("Ремонт квартиры", "Полный цикл работ");
@@ -94,14 +94,14 @@ class InMemoryTaskManagerTest {
                 "Описание",
                 Status.NEW,
                 120,
-                LocalDateTime.of(2025, 6, 1, 12, 30)
+                LocalDateTime.of(2025, 7, 1, 12, 30)
         );
         Task task3 = new Task(
                 "Задача3",
                 "Описание",
                 Status.NEW,
                 180,
-                LocalDateTime.of(2025, 6, 1, 12, 30)
+                LocalDateTime.of(2025, 8, 1, 12, 30)
         );
         manager.createTask(task1);
         manager.createTask(task2);
@@ -184,5 +184,50 @@ class InMemoryTaskManagerTest {
         assertTrue(subtask.getId() > 0, "ID должен быть установлен");
     }
 
+    @Test
+    void shouldBeTwoInPrioritizedTasksWhenTwoTasksDontCross() {
+        Task task1 = new Task(
+                "Задача 1",
+                "Описание 1",
+                Status.NEW,
+                10,
+                LocalDateTime.of(2025, 6, 1, 12, 30)
+        );
+        Task task2 = new Task(
+                "Задача 2",
+                "Описание 2",
+                Status.NEW,
+                10,
+                LocalDateTime.of(2025, 6, 2, 12, 30)
+        );
+        manager.createTask(task1);
+        manager.createTask(task2);
 
+        assertEquals(2, manager.getPrioritizedTasks().size());
+    }
+
+    @Test
+    void shouldBeErrorInPrioritizedTasksWhenTwoTasksCross() {
+        Task task1 = new Task(
+                "Задача 1",
+                "Описание 1",
+                Status.NEW,
+                10,
+                LocalDateTime.of(2025, 6, 1, 12, 30)
+        );
+        Task task2 = new Task(
+                "Задача 2",
+                "Описание 2",
+                Status.NEW,
+                10,
+                LocalDateTime.of(2025, 6, 1, 12, 30)
+        );
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+                    manager.createTask(task1);
+                    manager.createTask(task2);
+                });
+
+
+        assertEquals("Задача: " + task2 + " пересекается по времени с другой задачей.", thrown.getMessage());
+    }
 }
