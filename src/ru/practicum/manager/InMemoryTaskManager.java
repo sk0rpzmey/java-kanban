@@ -3,7 +3,7 @@ package ru.practicum.manager;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
+
 
 import ru.practicum.model.*;
 
@@ -364,7 +364,7 @@ public class InMemoryTaskManager implements TaskManager {
         LocalDateTime taskEndTime = task.getEndTime();
 
         return prioritizedTasks.stream()
-                .anyMatch(taskToCompare ->{
+                .anyMatch(taskToCompare -> {
                     LocalDateTime taskToCompareStartTime = taskToCompare.getStartTime();
                     LocalDateTime taskToCompareEndTime = taskToCompare.getEndTime();
                     return taskStartTime.isBefore(taskToCompareEndTime) && taskToCompareStartTime.isBefore(taskEndTime);
