@@ -78,8 +78,8 @@ public class Task {
         this.status = status;
     }
 
-    public void setDuration(Duration Minutes) {
-        this.duration = Minutes;
+    public void setDuration(Duration minutes) {
+        this.duration = minutes;
     }
 
     public void setStartTime(LocalDateTime startTime) {
