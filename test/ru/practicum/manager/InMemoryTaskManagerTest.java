@@ -10,11 +10,29 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
-    private TaskManager manager;
 
+    @Override
     @BeforeEach
     void setUp() {
-        manager = Manager.getDefault();
+        manager = (InMemoryTaskManager) Manager.getDefault();
+        task1 = new Task(
+                "Задача1",
+                "Описание1",
+                1,
+                Status.NEW,
+                120,
+                LocalDateTime.of(2025, 6, 1, 4, 30)
+        );
+        epic1 = new Epic("Эпик1", "Описание эпика1", 2);
+        subtask1 = new Subtask(
+                "Сабтаск1",
+                "Описание сабтаск1",
+                3,
+                epic1.getId(),
+                Status.NEW,
+                720,
+                LocalDateTime.of(2025, 7, 12, 8, 30)
+        );
     }
 
     @Test
@@ -223,9 +241,9 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
                 LocalDateTime.of(2025, 6, 1, 12, 30)
         );
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-                    manager.createTask(task1);
-                    manager.createTask(task2);
-                });
+            manager.createTask(task1);
+            manager.createTask(task2);
+        });
 
 
         assertEquals("Задача: " + task2 + " пересекается по времени с другой задачей.", thrown.getMessage());

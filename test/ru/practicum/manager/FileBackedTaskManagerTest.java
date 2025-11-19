@@ -17,14 +17,31 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import ru.practicum.model.*;
 
-public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager>{
-    private FileBackedTaskManager manager;
+public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
     @TempDir
     Path tempDir; // Автоматически создаст директорию
 
     @BeforeEach
-    void setUp()  {
+    void setUp() {
         manager = new FileBackedTaskManager(Paths.get("test_tasks.csv").toFile());
+        task1 = new Task(
+                "Задача1",
+                "Описание1",
+                1,
+                Status.NEW,
+                120,
+                LocalDateTime.of(2025, 6, 1, 4, 30)
+        );
+        epic1 = new Epic("Эпик1", "Описание эпика1", 2);
+        subtask1 = new Subtask(
+                "Сабтаск1",
+                "Описание сабтаск1",
+                3,
+                epic1.getId(),
+                Status.NEW,
+                720,
+                LocalDateTime.of(2025, 7, 12, 8, 30)
+        );
     }
 
     @AfterEach

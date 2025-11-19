@@ -116,6 +116,7 @@ public class InMemoryTaskManager implements TaskManager {
         Optional.of(epics.remove(id))
                 .ifPresent(epic -> {
                     epic.getSubtaskId().forEach(subtasksId -> {
+                        deleteTaskInPrioritizedTasks(subtasks.get(subtasksId));
                         subtasks.remove(subtasksId);
                         historyManager.remove(subtasksId);
                     });
@@ -265,6 +266,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllEpics() {
+        subtasks.keySet().forEach(subtasksId -> {
+            deleteTaskInPrioritizedTasks(subtasks.get(subtasksId));
+        });
         subtasks.keySet().forEach(historyManager::remove);
         epics.keySet().forEach(historyManager::remove);
         subtasks.clear();
@@ -298,8 +302,8 @@ public class InMemoryTaskManager implements TaskManager {
             return;
         }
 
-        LocalDateTime startTime = null;
-        LocalDateTime endTime = null;
+        LocalDateTime startTime = LocalDateTime.MAX;
+        LocalDateTime endTime = LocalDateTime.MIN;
 
         for (Subtask subtask : getSubtasksByEpicId(epicId)) {
             LocalDateTime start = subtask.getStartTime();
@@ -309,22 +313,17 @@ public class InMemoryTaskManager implements TaskManager {
                 continue;
             }
 
-            if (startTime == null || start.isBefore(startTime)) {
+
+            if (start.isBefore(startTime)) {
                 startTime = start;
             }
 
-            if (endTime == null || end.isAfter(endTime)) {
+            if (end.isAfter(endTime)) {
                 endTime = end;
             }
         }
-
-        if (startTime == null || endTime == null) {
-            return;
-        } else {
-            epic.setStartTime(startTime);
-            epic.setEndTime(endTime);
-        }
-
+        epic.setStartTime(startTime);
+        epic.setEndTime(endTime);
     }
 
     private void setPrioritizedTasks(Task task) {

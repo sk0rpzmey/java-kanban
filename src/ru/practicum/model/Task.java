@@ -17,9 +17,7 @@ public class Task {
             String description,
             Status status
     ) {
-        this.title = title;
-        this.description = description;
-        this.status = status;
+        this(title, description, 0, status, 0, null);
     }
 
     public Task(
@@ -29,11 +27,7 @@ public class Task {
             int durationInMinutes,
             LocalDateTime startTime
     ) {
-        this.title = title;
-        this.description = description;
-        this.status = status;
-        this.duration = Duration.ofMinutes(durationInMinutes);
-        this.startTime = startTime;
+        this(title, description, 0, status, durationInMinutes, startTime);
     }
 
     public Task(

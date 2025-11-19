@@ -1,5 +1,6 @@
 package ru.practicum.model;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -13,7 +14,7 @@ public class Epic extends Task {
     }
 
     public Epic(String title, String description, int id) {
-        super(title, description, id, Status.NEW,0, null);
+        super(title, description, id, Status.NEW, 0, null);
         subtaskId = new ArrayList<>();
     }
 
