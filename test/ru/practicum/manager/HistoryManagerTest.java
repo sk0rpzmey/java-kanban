@@ -13,7 +13,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class HistoryManagerTest {
     private HistoryManager historyManager;
-    private TaskManager manager;
     Task task1;
     Task task2;
     Task task3;
@@ -21,7 +20,6 @@ class HistoryManagerTest {
     @BeforeEach
     void setUp() {
         historyManager = Manager.getDefaultHistory();
-        manager = Manager.getDefault();
         task1 = new Task(
                 "Задача1",
                 "Описание1",
