@@ -1,53 +1,95 @@
 package ru.practicum.manager;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import ru.practicum.model.*;
 
-public class FileBackedTaskManagerTest {
+public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
     @TempDir
     Path tempDir; // Автоматически создаст директорию
 
+    @BeforeEach
+    void setUp() {
+        manager = new FileBackedTaskManager(Paths.get("test_tasks.csv").toFile());
+        task1 = new Task(
+                "Задача1",
+                "Описание1",
+                1,
+                Status.NEW,
+                120,
+                LocalDateTime.of(2025, 6, 1, 4, 30)
+        );
+        epic1 = new Epic("Эпик1", "Описание эпика1", 2);
+        subtask1 = new Subtask(
+                "Сабтаск1",
+                "Описание сабтаск1",
+                3,
+                epic1.getId(),
+                Status.NEW,
+                720,
+                LocalDateTime.of(2025, 7, 12, 8, 30)
+        );
+    }
+
+    @AfterEach
+    void cleanup() throws IOException {
+        // удалить временный файл после теста
+        Files.deleteIfExists(Paths.get("test_tasks.csv"));
+    }
+
     @Test
     void shouldLoadFromFileWithEmptyFile() throws IOException {
-        File tempFile = tempDir.resolve("tasks.csv").toFile();
-        // Создаем пустой файл
-        tempFile.createNewFile();
-
-        FileBackedTaskManager manager = FileBackedTaskManager.loadFromFile(tempFile);
-        Task task = new Task("Помыть машину", "Полная мойка с полировкой", Status.NEW);
+        Task task = new Task(
+                "Помыть машину",
+                "Полная мойка с полировкой",
+                Status.NEW,
+                20,
+                LocalDateTime.of(2025, 9, 12, 8, 30)
+        );
         manager.createTask(task);
 
         Epic epic = new Epic("Ремонт квартиры", "Полный цикл работ");
         manager.createEpic(epic);
 
-        Subtask subtask = new Subtask("Демонтаж стен", "", 2, Status.NEW);
+        Subtask subtask = new Subtask(
+                "Демонтаж стен",
+                "",
+                2,
+                Status.NEW,
+                720,
+                LocalDateTime.of(2025, 8, 12, 8, 30)
+        );
         manager.createSubtask(subtask);
 
         // Проверяем, что файл был создан
-        assertTrue(tempFile.exists());
+        File file = new File("test_tasks.csv");
+        assertTrue(file.exists());
 
-        // Проверяем данные
-        FileBackedTaskManager loadedManager = FileBackedTaskManager.loadFromFile(tempFile);
 
         // Проверяем задачу
-        assertEquals(1, loadedManager.getAllTasks().size());
-        Task loadedTask = loadedManager.getAllTasks().getFirst();
+        assertEquals(1, manager.getAllTasks().size());
+        Task loadedTask = manager.getAllTasks().getFirst();
         assertEquals(task.getId(), loadedTask.getId());
         assertEquals(task.getStatus(), loadedTask.getStatus());
         assertEquals(task.getDescription(), loadedTask.getDescription());
         assertEquals(task.getTitle(), loadedTask.getTitle());
 
         // Проверяем эпик
-        assertEquals(1, loadedManager.getAllEpics().size());
-        Epic loadedEpic = loadedManager.getAllEpics().getFirst();
+        assertEquals(1, manager.getAllEpics().size());
+        Epic loadedEpic = manager.getAllEpics().getFirst();
         assertEquals(epic.getId(), loadedEpic.getId());
         assertEquals(epic.getStatus(), loadedEpic.getStatus());
         assertEquals(epic.getDescription(), loadedEpic.getDescription());
@@ -56,8 +98,8 @@ public class FileBackedTaskManagerTest {
         assertEquals(epic.getSubtaskId(), loadedEpic.getSubtaskId());
 
         // Проверяем подзадачу
-        assertEquals(1, loadedManager.getAllSubtasks().size());
-        Subtask loadedSubtask = loadedManager.getAllSubtasks().getFirst();
+        assertEquals(1, manager.getAllSubtasks().size());
+        Subtask loadedSubtask = manager.getAllSubtasks().getFirst();
         assertEquals(subtask.getId(), loadedSubtask.getId());
         assertEquals(subtask.getStatus(), loadedSubtask.getStatus());
         assertEquals(subtask.getDescription(), loadedSubtask.getDescription());
@@ -71,10 +113,10 @@ public class FileBackedTaskManagerTest {
 
         // Записываем данные в файл
         try (FileWriter writer = new FileWriter(tempFile)) {
-            writer.write("id,type,name,status,description,epic\n");
-            writer.write("1,TASK,Помыть машину,NEW,Полная мойка с полировкой,\n");
-            writer.write("2,EPIC,Ремонт квартиры,NEW,Полный цикл работ,\n");
-            writer.write("3,SUBTASK,Демонтаж стен,NEW,,2\n");
+            writer.write("id;type;name;status;description;duration;startTime;endTime;epic\n");
+            writer.write("1;TASK;Помыть машину;NEW;Полная мойка с полировкой;PT2H;2025-06-01T12:30;2025-06-01T14:30;\n");
+            writer.write("2;EPIC;Ремонт квартиры;NEW;Полный цикл работ;PT12H;2025-08-12T08:30;2025-09-01T12:10;\n");
+            writer.write("3;SUBTASK;Демонтаж стен;NEW;;PT12H;2025-08-12T08:30;2025-08-12T20:30;2\n");
         }
 
         FileBackedTaskManager manager = FileBackedTaskManager.loadFromFile(tempFile);
@@ -90,13 +132,26 @@ public class FileBackedTaskManagerTest {
 
         FileBackedTaskManager manager = new FileBackedTaskManager(tempFile);
 
-        Task task = new Task("Помыть машину", "Полная мойка с полировкой", Status.NEW);
+        Task task = new Task(
+                "Помыть машину",
+                "Полная мойка с полировкой",
+                Status.NEW,
+                20,
+                LocalDateTime.of(2025, 9, 12, 8, 30)
+        );
         manager.createTask(task);
 
         Epic epic = new Epic("Ремонт квартиры", "Полный цикл работ");
         manager.createEpic(epic);
 
-        Subtask subtask = new Subtask("Демонтаж стен", "", 2, Status.NEW);
+        Subtask subtask = new Subtask(
+                "Демонтаж стен",
+                "",
+                2,
+                Status.NEW,
+                720,
+                LocalDateTime.of(2025, 8, 12, 8, 30)
+        );
         manager.createSubtask(subtask);
 
         // Проверяем, что файл был создан и содержит данные

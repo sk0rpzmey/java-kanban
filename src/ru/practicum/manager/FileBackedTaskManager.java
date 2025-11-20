@@ -1,5 +1,7 @@
 package ru.practicum.manager;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.io.*;
 import java.nio.file.Files;
@@ -8,7 +10,7 @@ import ru.practicum.exception.*;
 import ru.practicum.model.*;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
-    private static final String CSV_HEADER = "id,type,name,status,description,epic";
+    private static final String CSV_HEADER = "id;type;name;status;description;duration;startTime;endTime;epic";
     private final File file;
 
     public FileBackedTaskManager(File file) {
@@ -140,34 +142,37 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     private Task fromString(String value) {
-        String[] parts = value.split(",");
-        if (parts.length < 5) {
+        String[] parts = value.split(";");
+        if (parts.length < 8) {
             throw new ManagerLoadException("Недостаточно данных в строке", null);
         }
 
         try {
             int id = Integer.parseInt(parts[0]);
-            TaskType type = TaskType.valueOf(parts[1]);;
+            TaskType type = TaskType.valueOf(parts[1]);
+            ;
             String title = parts[2];
             Status status = Status.valueOf(parts[3]);
             String description = parts[4];
+            int durationInMinutes = (int) Duration.parse(parts[5]).toMinutes();
+            LocalDateTime startTime = LocalDateTime.parse(parts[6]);
 
             switch (type) {
                 case TASK:
-                    Task task = new Task(title, description, id, status);
-                    return task;
+                    return new Task(title, description, id, status, durationInMinutes, startTime);
                 case EPIC:
                     Epic epic = new Epic(title, description, id);
                     epic.setStatus(status);
+                    epic.setDuration(Duration.ofMinutes(durationInMinutes));
+                    epic.setEndTime(LocalDateTime.parse(parts[7]));
                     return epic;
                 case SUBTASK:
                     int epicId = 0;
-                    if (parts.length > 5 && !parts[5].isEmpty()) {
-                        epicId = Integer.parseInt(parts[5]);
+                    if (parts.length > 8 && !parts[8].isEmpty()) {
+                        epicId = Integer.parseInt(parts[8]);
                     }
-                    Subtask subtask = new Subtask(title, description, epicId, status);
+                    Subtask subtask = new Subtask(title, description, epicId, status, durationInMinutes, startTime);
                     subtask.setId(id);
-                    subtask.setStatus(status);
                     return subtask;
                 default:
                     throw new ManagerLoadException("Неизвестный тип задачи: " + type, null);
@@ -203,12 +208,15 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             epicId = String.valueOf(((Subtask) task).getEpicId());
         }
 
-        return String.format("%d,%s,%s,%s,%s,%s",
+        return String.format("%d;%s;%s;%s;%s;%s;%s;%s;%s",
                 task.getId(),
                 task.getType(),
                 task.getTitle(),
                 task.getStatus(),
                 task.getDescription(),
+                task.getDuration(),
+                task.getStartTime(),
+                task.getEndTime(),
                 epicId);
     }
 }
